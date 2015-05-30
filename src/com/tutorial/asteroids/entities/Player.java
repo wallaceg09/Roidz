@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
+import com.sun.javafx.geom.Line2D;
 import com.tutorial.asteroids.Asteroids;
 
 public class Player extends SpaceObject{
@@ -26,6 +27,10 @@ public class Player extends SpaceObject{
 	
 	private float deltaRadians = 4 * 3.1415f / 5; //Angle from center that two wing thingies should be. https://youtu.be/kQn2QkkNaW0?t=713
 	
+	private boolean hit;
+	private boolean dead;
+	
+	//private Line2D
 	public Player(ArrayList<Bullet> bullets){
 		
 		this.bullets = bullets;
