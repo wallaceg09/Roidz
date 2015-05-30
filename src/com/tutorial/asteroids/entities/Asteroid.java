@@ -15,15 +15,16 @@ public class Asteroid extends SpaceObject{
 	
 	private int numPoints;
 	private float[] dists;
-
+	
 	private boolean remove;
 	
-	public Asteroid(float x, float y, int type){
+	public Asteroid(float x, float y, int type) {
+		
 		this.x = x;
 		this.y = y;
 		this.type = type;
 		
-		switch(type){
+		switch (type) {
 		case SMALL:
 			numPoints = 8;
 			width = height = 12;
@@ -41,39 +42,39 @@ public class Asteroid extends SpaceObject{
 			break;
 		}
 		
-		rotationSpeed = MathUtils.random(-1, 1);//FIXME: This returns an int, so the possible values are {-1, 0, 1}. Bugger that.
-		radians = MathUtils.random(2 * 3.1415f);
+		rotationSpeed = MathUtils.random(-1, 1);
 		
+		radians = MathUtils.random(2 * 3.1415f);
 		dx = MathUtils.cos(radians) * speed;
 		dy = MathUtils.sin(radians) * speed;
 		
 		shapex = new float[numPoints];
 		shapey = new float[numPoints];
-		
 		dists = new float[numPoints];
 		
-		int radius = width/2;
-		
-		for(int i = 0; i < numPoints; ++i){
+		int radius = width / 2;
+		for(int i = 0; i < numPoints; ++i) {
 			dists[i] = MathUtils.random(radius / 2, radius);
 		}
+		
 		setShape();
-		System.out.println(this.toString());
+		
 	}
 	
-	public void setShape(){
+	private void setShape() {
 		float angle = 0;
-		for (int i = 0; i < numPoints; ++i){
+		for(int i = 0; i < numPoints; ++i) {
 			shapex[i] = x + MathUtils.cos(angle + radians) * dists[i];
-			shapey[i] = x + MathUtils.sin(angle + radians) * dists[i];
-			angle += 2 * 3.1415f /numPoints;
+			shapey[i] = y + MathUtils.sin(angle + radians) * dists[i];
+			angle += 2 * 3.1415f / numPoints;
 		}
 	}
 	
-	public int getType(){ return type;}
-	public boolean shouldRemove(){ return remove; }
+	public int getType() { return type; }
+	public boolean shouldRemove() { return remove; }
 	
-	public void update(float dt){
+	public void update(float dt) {
+		
 		x += dx * dt;
 		y += dy * dt;
 		
@@ -81,19 +82,22 @@ public class Asteroid extends SpaceObject{
 		setShape();
 		
 		wrap();
+		
 	}
 	
-	public void draw(ShapeRenderer sr){
+	public void draw(ShapeRenderer sr) {
 		sr.setColor(1, 1, 1, 1);
-		
 		sr.begin(ShapeType.Line);
 		for(int i = 0, j = shapex.length - 1;
-				i < shapex.length;
-				j = i++){
+			i < shapex.length;
+			j = ++i) {
+			
 			sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
+			
 		}
 		sr.end();
 	}
+	
 
 	@Override
 	public String toString() {
