@@ -13,6 +13,9 @@ import com.tutorial.asteroids.managers.GameStateManager;
 
 public class PlayState extends GameState{
 	
+	private static final int MEDIUM_ROIDS_FROM_LARGE = 2;
+	private static final int SMALL_ROIDS_FROM_MEDIUM = 4;
+	
 	private ShapeRenderer sr;
 	
 	private Player player;
@@ -43,6 +46,24 @@ public class PlayState extends GameState{
 		spawnAsteroids();
 	}
 	
+	private void splitAsteroid(Asteroid asteroid){
+		--numAsteroidsLeft;
+		switch(asteroid.getType()){
+		case Asteroid.LARGE:
+			for(int i = 0; i < MEDIUM_ROIDS_FROM_LARGE; ++i){
+				asteroids.add(new Asteroid(asteroid.getx(), asteroid.gety(), Asteroid.MEDIUM));
+			}
+			break;
+		case Asteroid.MEDIUM:
+			for(int i = 0; i < SMALL_ROIDS_FROM_MEDIUM; ++i){
+				asteroids.add(new Asteroid(asteroid.getx(), asteroid.gety(), Asteroid.SMALL));
+			}
+			break;
+		case Asteroid.SMALL:
+			break;
+		}
+	}
+	
 	private void spawnAsteroids(){
 		asteroids.clear();
 		
@@ -62,7 +83,9 @@ public class PlayState extends GameState{
 				float dy = y - player.gety();
 				dist = (float ) Math.sqrt(dx * dx + dy * dy);
 			}while(dist < 100);
-			asteroids.add(new Asteroid(x, y, Asteroid.LARGE));
+			Asteroid a = new Asteroid(x, y, Asteroid.LARGE);
+			asteroids.add(a);
+			System.out.println(a.toString());
 		}
 	}
 
@@ -86,6 +109,38 @@ public class PlayState extends GameState{
 			if(roid.shouldRemove()){
 				asteroids.remove(i);
 				--i;
+			}
+		}
+		
+		//check collisions
+		checkCollisions();
+	}
+	
+	public void checkCollisions(){
+		//player-asteroid collision
+		for(int i = 0; i < asteroids.size(); ++i){
+			Asteroid a = asteroids.get(i);
+			if(a.intersects(player)){
+				player.hit();
+				asteroids.remove(i--);
+				splitAsteroid(a);
+				break;
+			}
+			//if player intersects asteroid then game over maaaaan
+		}
+		
+		//bullet-asteroid collision
+		for(int i = 0; i < bullets.size(); ++i){
+			Bullet b = bullets.get(i);
+			for(int j = 0; j < asteroids.size(); ++j){
+				Asteroid a = asteroids.get(j);
+				//If a contains the point b
+				if(a.contains(b.getx(),b.gety())){
+					bullets.remove(i--);
+					asteroids.remove(j--);//TODO: Move into splitAsteroid method
+					splitAsteroid(a);
+					break;
+				}
 			}
 		}
 	}

@@ -9,7 +9,7 @@ import com.tutorial.asteroids.Asteroids;
 
 public class Player extends SpaceObject{
 	
-	private final int MAX_BULLETS = 4;
+	private final int MAX_BULLETS = 100;
 	private ArrayList<Bullet> bullets;
 	
 	private float[] flamex;
@@ -83,6 +83,10 @@ public class Player extends SpaceObject{
 		}
 	}
 	
+	public void hit(){
+		System.out.println("Player has been hit.");
+	}
+	
 	public void update(float dt){
 		//Turning
 		if(left){
@@ -113,7 +117,7 @@ public class Player extends SpaceObject{
 		
 		if(vec > maxSpeed){
 			dx = (dx/vec) * maxSpeed;
-			dy = (dx/vec) * maxSpeed;
+			dy = (dy/vec) * maxSpeed;
 		}
 		
 		//set position

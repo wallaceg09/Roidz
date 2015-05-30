@@ -90,7 +90,7 @@ public class Asteroid extends SpaceObject{
 		sr.begin(ShapeType.Line);
 		for(int i = 0, j = shapex.length - 1;
 			i < shapex.length;
-			j = ++i) {
+			j = i++) {
 			
 			sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
 			
