@@ -33,17 +33,7 @@ public class Asteroids implements ApplicationListener {
 		camera.translate(WIDTH/2, HEIGHT/2);
 		camera.update();
 		batch = new SpriteBatch();
-		
-		texture = new Texture(Gdx.files.internal("data/libgdx.png"));
-		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
-		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
-		
-		sprite = new Sprite(region);
-		sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
-		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
-		sprite.setPosition(-sprite.getWidth()/2, -sprite.getHeight()/2);
-		
+				
 		Gdx.input.setInputProcessor(new GameINputProcessor());
 		
 		gsm = new GameStateManager();
@@ -52,7 +42,6 @@ public class Asteroids implements ApplicationListener {
 	@Override
 	public void dispose() {
 		batch.dispose();
-		texture.dispose();
 	}
 
 	@Override
@@ -60,24 +49,10 @@ public class Asteroids implements ApplicationListener {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		//test game keys
-//		if(GameKeys.isDown(GameKeys.SPACE)){
-//			System.out.println("SPACE IS DOWN");
-//		}
-		
-		if(GameKeys.isPressed(GameKeys.SPACE)){
-			System.out.println("SPACE IS PRESSED");
-		}
-		
-		GameKeys.update();
-		
 		gsm.update(Gdx.graphics.getDeltaTime());
 		gsm.draw();
 		
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		sprite.draw(batch);
-		batch.end();
+		GameKeys.update();
 	}
 
 	@Override

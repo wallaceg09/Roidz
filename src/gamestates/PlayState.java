@@ -1,6 +1,12 @@
 package gamestates;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
+import com.tutorial.asteroids.Asteroids;
+import com.tutorial.asteroids.entities.Asteroid;
+import com.tutorial.asteroids.entities.Bullet;
 import com.tutorial.asteroids.entities.Player;
 import com.tutorial.asteroids.managers.GameKeys;
 import com.tutorial.asteroids.managers.GameStateManager;
@@ -10,6 +16,12 @@ public class PlayState extends GameState{
 	private ShapeRenderer sr;
 	
 	private Player player;
+	private ArrayList<Bullet> bullets;
+	private ArrayList<Asteroid> asteroids;
+	
+	private int level;
+	private int totalAsteroids;
+	private int numAsteroidsLeft;
 
 	public  PlayState(GameStateManager gsm) {
 		super(gsm);
@@ -20,18 +32,75 @@ public class PlayState extends GameState{
 	public void init() {
 		sr = new ShapeRenderer();
 		
-		player = new Player();
+		bullets = new ArrayList<Bullet>();
+		
+		player = new Player(bullets);
+		
+		asteroids = new ArrayList<Asteroid>();
+		
+		level = 1;
+		
+		spawnAsteroids();
+	}
+	
+	private void spawnAsteroids(){
+		asteroids.clear();
+		
+		int numToSpawn = 4 + level - 1;
+		totalAsteroids = numToSpawn * 7;
+		numAsteroidsLeft = totalAsteroids;
+		
+		for(int i = 0; i < numToSpawn; ++i){
+			float x = 0;
+			float y = 0;
+			float dist = 0;
+			do{
+				x = MathUtils.random(Asteroids.WIDTH);
+				y = MathUtils.random(Asteroids.HEIGHT);
+				
+				float dx = x - player.getx();
+				float dy = y - player.gety();
+				dist = (float ) Math.sqrt(dx * dx + dy * dy);
+			}while(dist < 100);
+			asteroids.add(new Asteroid(x, y, Asteroid.LARGE));
+		}
 	}
 
 	@Override
 	public void update(float dt) {
-		handleInput();	
+		handleInput();
 		player.update(dt);
+		
+		for(int i = 0; i < bullets.size(); ++i){
+			Bullet bullet = bullets.get(i);
+			bullet.update(dt);
+			if(bullet.shouldRemove()){
+				bullets.remove(i);
+				--i;
+			}
+		}
+		
+		for(int i = 0; i < asteroids.size(); ++i){
+			Asteroid roid = asteroids.get(i);
+			roid.update(dt);
+			if(roid.shouldRemove()){
+				asteroids.remove(i);
+				--i;
+			}
+		}
 	}
 
 	@Override
 	public void draw() {
 		player.draw(sr);
+		
+		for(Bullet bullet : bullets){
+			bullet.draw(sr);
+		}
+		
+		for(Asteroid roid : asteroids){
+			roid.draw(sr);
+		}
 	}
 
 	@Override
@@ -39,6 +108,9 @@ public class PlayState extends GameState{
 		player.setLeft(GameKeys.isDown(GameKeys.LEFT));
 		player.setRight(GameKeys.isDown(GameKeys.RIGHT));
 		player.setUp(GameKeys.isDown(GameKeys.UP));
+		if(GameKeys.isPressed(GameKeys.SPACE)){
+			player.shoot();
+		}
 	}
 
 	@Override

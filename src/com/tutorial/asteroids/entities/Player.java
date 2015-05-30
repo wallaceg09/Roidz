@@ -1,11 +1,20 @@
 package com.tutorial.asteroids.entities;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.tutorial.asteroids.Asteroids;
 
 public class Player extends SpaceObject{
+	
+	private final int MAX_BULLETS = 4;
+	private ArrayList<Bullet> bullets;
+	
+	private float[] flamex;
+	private float[] flamey;
+	
 	private boolean left;
 	private boolean right;
 	private boolean up;
@@ -13,10 +22,14 @@ public class Player extends SpaceObject{
 	private float maxSpeed;
 	private float acceleration;
 	private float deceleration;
+	private float acceleratingTimer;
 	
 	private float deltaRadians = 4 * 3.1415f / 5; //Angle from center that two wing thingies should be. https://youtu.be/kQn2QkkNaW0?t=713
 	
-	public Player(){
+	public Player(ArrayList<Bullet> bullets){
+		
+		this.bullets = bullets;
+			
 		x = Asteroids.WIDTH/2;
 		y = Asteroids.HEIGHT/2;
 		
@@ -26,6 +39,9 @@ public class Player extends SpaceObject{
 		
 		shapex = new float[4];
 		shapey = new float[4];
+		
+		flamex = new float[3];
+		flamey = new float[3];
 		
 		radians = 3.1415f / 2.0f;
 		rotationSpeed = 3.0f;
@@ -46,9 +62,26 @@ public class Player extends SpaceObject{
 		shapey[3] = y + MathUtils.sin(radians + deltaRadians) * 8;
 	}
 	
+	private void setFlame(){
+		flamex[0] = x + MathUtils.cos(radians - 5 * 3.1415f / 6) * 5;
+		flamey[0] = y + MathUtils.sin(radians - 5 * 3.1415f / 6) * 5;
+		
+		flamex[1] = x + MathUtils.cos(radians - 3.1415f) * (6 + acceleratingTimer * 50);
+		flamey[1] = y + MathUtils.sin(radians - 3.1415f) * (6 + acceleratingTimer * 50);
+		
+		flamex[2] = x + MathUtils.cos(radians + 5 * 3.1415f / 6) * 5;
+		flamey[2] = y + MathUtils.sin(radians + 5 * 3.1415f / 6) * 5;
+	}
+	
 	public void setLeft(boolean b){ left = b; }
 	public void setRight(boolean b){ right = b; }
 	public void setUp(boolean b){ up = b; }
+	
+	public void shoot(){
+		if(bullets.size() < MAX_BULLETS){
+			bullets.add(new Bullet(x, y, radians));
+		}
+	}
 	
 	public void update(float dt){
 		//Turning
@@ -62,6 +95,13 @@ public class Player extends SpaceObject{
 		if(up){
 			dx += MathUtils.cos(radians) * acceleration * dt;
 			dy += MathUtils.sin(radians) * acceleration * dt;
+			acceleratingTimer += dt;
+			if(acceleratingTimer > 0.1f){
+				acceleratingTimer = 0;
+			}
+		}
+		else{
+			acceleratingTimer = 0;
 		}
 		
 		//deceleration
@@ -83,6 +123,11 @@ public class Player extends SpaceObject{
 		//set Shape
 		this.setShape();
 		
+		//set flame
+		if(up){
+			setFlame();
+		}
+		
 		//screen wrap
 		wrap();
 	}
@@ -92,10 +137,20 @@ public class Player extends SpaceObject{
 		
 		sr.begin(ShapeType.Line);
 		
+		//draw ship
 		for(int i = 0, j = shapex.length - 1;
 				i < shapex.length;
 				j = i++){
 			sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
+		}
+		
+		//draw flames
+		if(up){
+			for(int i = 0, j = flamex.length - 1;
+					i < flamex.length;
+					j = i++){
+				sr.line(flamex[i], flamey[i], flamex[j], flamey[j]);
+			}
 		}
 		
 		sr.end();
