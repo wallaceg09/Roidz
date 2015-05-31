@@ -60,7 +60,7 @@ public class GameData implements Serializable{
 			long score = highScores[i];
 			String name = names[i];
 			int j;
-			for(j = i - 1; j >= 0 && highScores[j] < score; ++j){
+			for(j = i - 1; j >= 0 && highScores[j] < score; --j){
 				
 				highScores[j + 1] = highScores[j];
 				names[j + 1] = names[j];

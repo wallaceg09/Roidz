@@ -2,6 +2,7 @@ package com.tutorial.asteroids.managers;
 
 import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
+import gamestates.GameOverState;
 import gamestates.GameState;
 import gamestates.HighScoreState;
 import gamestates.MenuState;
@@ -14,6 +15,7 @@ public class GameStateManager {
 	public static final int MENU = 0;
 	public static final int PLAY = 1;
 	public static final int HIGHSCORES = 2;
+	public static final int GAMEOVER = 3;
 
 	public static final int INITIAL_STATE = PLAY;
 	
@@ -31,6 +33,9 @@ public class GameStateManager {
 		}
 		else if(state == HIGHSCORES){
 			gameState = new HighScoreState(this);
+		}
+		else if(state == GAMEOVER){
+			gameState = new GameOverState(this);
 		}
 	}
 	

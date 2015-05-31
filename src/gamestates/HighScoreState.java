@@ -49,20 +49,15 @@ public class HighScoreState extends GameState{
 		
 		s = "High Scores";
 		
-		drawCenteredString(s, 300);
+		drawCenteredString(sb, font, s, 300);
 		
 		for(int i = 0; i < highScores.length; ++i){
 			s = String.format("%2d. %7d %s", i + 1, highScores[i], names[i]);
-			drawCenteredString(s, 270 - 20 * i);
+			drawCenteredString(sb, font, s, 270 - 20 * i);
 		}
 		
 		sb.end();
 		
-	}
-	
-	private void drawCenteredString(String string, float y) {
-		float w = font.getBounds(string).width;
-		font.draw(sb, string, (Asteroids.WIDTH - w) / 2, y);
 	}
 
 	@Override

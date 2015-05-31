@@ -17,6 +17,7 @@ import com.tutorial.asteroids.entities.Player;
 import com.tutorial.asteroids.managers.GameKeys;
 import com.tutorial.asteroids.managers.GameStateManager;
 import com.tutorial.asteroids.managers.Jukebox;
+import com.tutorial.asteroids.managers.Save;
 
 public class PlayState extends GameState{
 	
@@ -149,7 +150,10 @@ public class PlayState extends GameState{
 		
 		if(player.isDead()){
 			if(player.getLives() == 0){
-				gsm.setState(GameStateManager.MENU);
+				Jukebox.stopAll();
+				Save.gd.setTentativeScore(player.getScore());
+				gsm.setState(GameStateManager.GAMEOVER);
+				return;
 			}
 			player.reset();
 			player.loseLife();

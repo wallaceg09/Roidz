@@ -10,6 +10,7 @@ import com.tutorial.asteroids.Asteroids;
 import com.tutorial.asteroids.entities.Asteroid;
 import com.tutorial.asteroids.managers.GameKeys;
 import com.tutorial.asteroids.managers.GameStateManager;
+import com.tutorial.asteroids.managers.Save;
 
 public class MenuState extends GameState{
 
@@ -43,6 +44,7 @@ public class MenuState extends GameState{
 				"Highscores",
 				"Quit"
 		};
+		Save.load();
 	}
 
 	@Override
