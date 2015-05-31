@@ -3,6 +3,7 @@ package com.tutorial.asteroids.managers;
 import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
 import gamestates.GameState;
+import gamestates.MenuState;
 import gamestates.PlayState;
 
 public class GameStateManager {
@@ -15,13 +16,13 @@ public class GameStateManager {
 	public static final int INITIAL_STATE = PLAY;
 	
 	public GameStateManager(){
-		setState(PLAY);
+		setState(MENU);
 	}
 	
 	public void setState(int state){
 		if(gameState != null) gameState.dispose();
 		if(state == MENU){
-			//gameState = new MenuState(this);
+			gameState = new MenuState(this);
 		}else if(state == PLAY){
 			gameState = new PlayState(this);
 		}

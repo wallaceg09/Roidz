@@ -148,6 +148,9 @@ public class PlayState extends GameState{
 		player.update(dt);
 		
 		if(player.isDead()){
+			if(player.getLives() == 0){
+				gsm.setState(GameStateManager.MENU);
+			}
 			player.reset();
 			player.loseLife();
 			return;
@@ -171,7 +174,7 @@ public class PlayState extends GameState{
 			}
 		}
 		
-		//update partciles
+		//update particles
 		for(int i = 0; i < particles.size(); ++i){
 			particles.get(i).update( dt );
 			if(particles.get(i).shouldRemove()){

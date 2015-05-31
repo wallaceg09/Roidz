@@ -15,7 +15,7 @@ import com.tutorial.asteroids.managers.GameStateManager;
 import com.tutorial.asteroids.managers.Jukebox;
 
 public class Asteroids implements ApplicationListener {
-	private OrthographicCamera camera;
+	public OrthographicCamera camera;
 	private SpriteBatch batch;
 	private Texture texture;
 	private Sprite sprite;
