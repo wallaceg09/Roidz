@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.tutorial.asteroids.Asteroids;
 import com.tutorial.asteroids.entities.Asteroid;
 import com.tutorial.asteroids.entities.Bullet;
+import com.tutorial.asteroids.entities.Particle;
 import com.tutorial.asteroids.entities.Player;
 import com.tutorial.asteroids.managers.GameKeys;
 import com.tutorial.asteroids.managers.GameStateManager;
@@ -21,6 +22,8 @@ public class PlayState extends GameState{
 	private Player player;
 	private ArrayList<Bullet> bullets;
 	private ArrayList<Asteroid> asteroids;
+	
+	private ArrayList<Particle> particles;
 	
 	private int level;
 	private int totalAsteroids;
@@ -41,12 +44,22 @@ public class PlayState extends GameState{
 		
 		asteroids = new ArrayList<Asteroid>();
 		
+		particles = new ArrayList<Particle>();
+		
 		level = 1;
 		
 		spawnAsteroids();
 	}
 	
+	private void createParticles(float x, float y){
+		for(int i = 0; i < 6; ++i){//TODO: make "6" a parameterized value
+			particles.add(new Particle(x, y));
+		}
+	}
+	
 	private void splitAsteroid(Asteroid asteroid){
+		createParticles(asteroid.getx(), asteroid.gety());
+		
 		--numAsteroidsLeft;
 		switch(asteroid.getType()){
 		case Asteroid.LARGE:
@@ -92,7 +105,19 @@ public class PlayState extends GameState{
 	@Override
 	public void update(float dt) {
 		handleInput();
+		
+		//next level
+		if(asteroids.size() == 0){
+			++level;
+			spawnAsteroids();
+		}
+		
 		player.update(dt);
+		
+		if(player.isDead()){
+			player.reset();
+			return;
+		}
 		
 		for(int i = 0; i < bullets.size(); ++i){
 			Bullet bullet = bullets.get(i);
@@ -112,21 +137,31 @@ public class PlayState extends GameState{
 			}
 		}
 		
+		//update partciles
+		for(int i = 0; i < particles.size(); ++i){
+			particles.get(i).update( dt );
+			if(particles.get(i).shouldRemove()){
+				particles.remove(i--);
+			}
+		}
+		
 		//check collisions
 		checkCollisions();
 	}
 	
 	public void checkCollisions(){
 		//player-asteroid collision
-		for(int i = 0; i < asteroids.size(); ++i){
-			Asteroid a = asteroids.get(i);
-			if(a.intersects(player)){
-				player.hit();
-				asteroids.remove(i--);
-				splitAsteroid(a);
-				break;
-			}
-			//if player intersects asteroid then game over maaaaan
+		if(!player.isHit()){
+			for(int i = 0; i < asteroids.size(); ++i){
+				Asteroid a = asteroids.get(i);
+				if(a.intersects(player)){
+					player.hit();
+					asteroids.remove(i--);
+					splitAsteroid(a);
+					break;
+				}
+				//if player intersects asteroid then game over maaaaan
+			}			
 		}
 		
 		//bullet-asteroid collision
@@ -155,6 +190,10 @@ public class PlayState extends GameState{
 		
 		for(Asteroid roid : asteroids){
 			roid.draw(sr);
+		}
+		
+		for(Particle part : particles){
+			part.draw(sr);
 		}
 	}
 
