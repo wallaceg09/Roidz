@@ -52,7 +52,7 @@ public class MenuState extends GameState{
 
 	@Override
 	public void draw() {
-		//sb.setProjectionMatrix(Game.cam.combined);//FIXME: Not working. Checkout his code @ part 13 to see which Game he is referencing
+		sb.setProjectionMatrix(Asteroids.camera.combined);
 		
 		sb.begin();
 		//Draw title
@@ -107,9 +107,9 @@ public class MenuState extends GameState{
 			gsm.setState(GameStateManager.PLAY);
 		}
 		else if(currentItem == 1){//HIGHSCORES selected
-			//gsm.setState(GameStateManager.HIGHSCORES);//TODO: Implement
+			gsm.setState(GameStateManager.HIGHSCORES);
 		}
-		else if(currentItem == 2){
+		else if(currentItem == 2){//EXIT selected
 			Gdx.app.exit();
 		}
 	}

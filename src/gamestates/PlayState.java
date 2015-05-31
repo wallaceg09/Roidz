@@ -234,6 +234,10 @@ public class PlayState extends GameState{
 
 	@Override
 	public void draw() {
+		
+		sb.setProjectionMatrix(Asteroids.camera.combined);
+		sr.setProjectionMatrix(Asteroids.camera.combined);		
+		
 		player.draw(sr);
 		
 		for(Bullet bullet : bullets){
