@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.tutorial.asteroids.managers.GameINputProcessor;
 import com.tutorial.asteroids.managers.GameKeys;
 import com.tutorial.asteroids.managers.GameStateManager;
+import com.tutorial.asteroids.managers.Jukebox;
 
 public class Asteroids implements ApplicationListener {
 	private OrthographicCamera camera;
@@ -32,16 +33,24 @@ public class Asteroids implements ApplicationListener {
 		camera = new OrthographicCamera(WIDTH, HEIGHT);
 		camera.translate(WIDTH/2, HEIGHT/2);
 		camera.update();
-		batch = new SpriteBatch();
 				
 		Gdx.input.setInputProcessor(new GameINputProcessor());
+		
+		Jukebox.load("sounds/explode.ogg", "explode");
+		Jukebox.load("sounds/extralife.ogg", "extralife");
+		Jukebox.load("sounds/largesaucer.ogg", "largesaucer");
+		Jukebox.load("sounds/pulsehigh.ogg", "pulsehigh");
+		Jukebox.load("sounds/pulselow.ogg", "pulselow");
+		Jukebox.load("sounds/saucershoot.ogg", "saucershoot");
+		Jukebox.load("sounds/shoot.ogg", "shoot");
+		Jukebox.load("sounds/smallsaucer.ogg", "smallsaucer");
+		Jukebox.load("sounds/thruster.ogg", "thruster");
 		
 		gsm = new GameStateManager();
 	}
 
 	@Override
 	public void dispose() {
-		batch.dispose();
 	}
 
 	@Override

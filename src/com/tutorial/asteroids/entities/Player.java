@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.tutorial.asteroids.Asteroids;
+import com.tutorial.asteroids.managers.Jukebox;
 
 public class Player extends SpaceObject{
 	
@@ -96,7 +97,15 @@ public class Player extends SpaceObject{
 	
 	public void setLeft(boolean b){ left = b; }
 	public void setRight(boolean b){ right = b; }
-	public void setUp(boolean b){ up = b; }
+	public void setUp(boolean b)
+	{
+		if(b && !up && !hit && !dead){
+			Jukebox.loop("thruster");//FIXME: If a player dies while holding the up button, the thruster noise doesn't play. Might want to move this into update or something...
+		}else if (hit || dead || !b){
+			Jukebox.stop("thruster");
+		}
+		up = b;
+	}
 	
 	@Override
 	public void setPosition(float x, float y){
@@ -105,14 +114,18 @@ public class Player extends SpaceObject{
 	}
 	
 	public void shoot(){
-		if(bullets.size() < MAX_BULLETS){
-			bullets.add(new Bullet(x, y, radians));
+		if(!hit && !dead){
+			if(bullets.size() < MAX_BULLETS){
+				bullets.add(new Bullet(x, y, radians));
+			}
+			Jukebox.play("shoot");			
 		}
 	}
 	
 	public void hit(){
 		System.out.println("Player has been hit.");
 		if(!hit){
+			Jukebox.play("explode");
 			hit = true;
 			dx = dy = 0;
 			left = right = up = false;
@@ -187,6 +200,7 @@ public class Player extends SpaceObject{
 		if(score >= requiredScore){
 			++extraLives;
 			requiredScore += 10000;
+			Jukebox.play("extralife");
 		}
 		
 		//Turning

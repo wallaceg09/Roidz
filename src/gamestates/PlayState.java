@@ -16,6 +16,7 @@ import com.tutorial.asteroids.entities.Particle;
 import com.tutorial.asteroids.entities.Player;
 import com.tutorial.asteroids.managers.GameKeys;
 import com.tutorial.asteroids.managers.GameStateManager;
+import com.tutorial.asteroids.managers.Jukebox;
 
 public class PlayState extends GameState{
 	
@@ -38,6 +39,12 @@ public class PlayState extends GameState{
 	private int level;
 	private int totalAsteroids;
 	private int numAsteroidsLeft;
+	
+	private float maxDelay;
+	private float minDelay;
+	private float currentDelay;
+	private float bgTimer;
+	private boolean playLowPulse;
 
 	public  PlayState(GameStateManager gsm) {
 		super(gsm);
@@ -66,6 +73,13 @@ public class PlayState extends GameState{
 		spawnAsteroids();
 		
 		hudPlayer = new Player(null);
+		
+		//setup background music
+		maxDelay = 1;
+		minDelay = 0.25f;
+		currentDelay = maxDelay;
+		bgTimer = maxDelay;
+		playLowPulse = true;
 	}
 	
 	private void createParticles(float x, float y){
@@ -76,8 +90,8 @@ public class PlayState extends GameState{
 	
 	private void splitAsteroid(Asteroid asteroid){
 		createParticles(asteroid.getx(), asteroid.gety());
-		
 		--numAsteroidsLeft;
+		currentDelay = ((maxDelay - minDelay) * numAsteroidsLeft / totalAsteroids) + minDelay;
 		switch(asteroid.getType()){
 		case Asteroid.LARGE:
 			for(int i = 0; i < MEDIUM_ROIDS_FROM_LARGE; ++i){
@@ -100,6 +114,8 @@ public class PlayState extends GameState{
 		int numToSpawn = 4 + level - 1;
 		totalAsteroids = numToSpawn * 7;
 		numAsteroidsLeft = totalAsteroids;
+		
+		currentDelay = maxDelay;
 		
 		for(int i = 0; i < numToSpawn; ++i){
 			float x = 0;
@@ -165,6 +181,19 @@ public class PlayState extends GameState{
 		
 		//check collisions
 		checkCollisions();
+		
+		//play background music
+		bgTimer += dt;
+		if(!player.isHit() && bgTimer >= currentDelay){
+			if(playLowPulse){
+				Jukebox.play("pulselow");
+			}
+			else{
+				Jukebox.play("pulsehigh");
+			}
+			playLowPulse = !playLowPulse;
+			bgTimer = 0;
+		}
 	}
 	
 	public void checkCollisions(){
@@ -193,6 +222,7 @@ public class PlayState extends GameState{
 					asteroids.remove(j--);//TODO: Move into splitAsteroid method
 					splitAsteroid(a);
 					player.incrementScore(a.getScore());
+					Jukebox.play("explode");//TODO: Move to splitAsteroid?
 					break;
 				}
 			}
