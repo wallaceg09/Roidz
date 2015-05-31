@@ -98,6 +98,12 @@ public class Player extends SpaceObject{
 	public void setRight(boolean b){ right = b; }
 	public void setUp(boolean b){ up = b; }
 	
+	@Override
+	public void setPosition(float x, float y){
+		super.setPosition(x, y);
+		setShape();
+	}
+	
 	public void shoot(){
 		if(bullets.size() < MAX_BULLETS){
 			bullets.add(new Bullet(x, y, radians));

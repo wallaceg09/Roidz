@@ -27,7 +27,9 @@ public class PlayState extends GameState{
 	
 	private BitmapFont font;
 	
+	private Player hudPlayer;
 	private Player player;
+	
 	private ArrayList<Bullet> bullets;
 	private ArrayList<Asteroid> asteroids;
 	
@@ -62,6 +64,8 @@ public class PlayState extends GameState{
 		level = 1;
 		
 		spawnAsteroids();
+		
+		hudPlayer = new Player(null);
 	}
 	
 	private void createParticles(float x, float y){
@@ -217,6 +221,12 @@ public class PlayState extends GameState{
 		sb.begin();
 		font.draw(sb, Long.toString(player.getScore()), 40, 390);
 		sb.end();
+		
+		//draw lives
+		for(int i = 0; i < player.getLives(); ++i){
+			hudPlayer.setPosition(40 + 15 * i, 360);
+			hudPlayer.draw(sr);			
+		}
 	}
 
 	@Override
