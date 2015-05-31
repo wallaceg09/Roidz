@@ -2,6 +2,11 @@ package gamestates;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.tutorial.asteroids.Asteroids;
@@ -17,7 +22,10 @@ public class PlayState extends GameState{
 	private static final int MEDIUM_ROIDS_FROM_LARGE = 2;
 	private static final int SMALL_ROIDS_FROM_MEDIUM = 4;
 	
+	private SpriteBatch sb;
 	private ShapeRenderer sr;
+	
+	private BitmapFont font;
 	
 	private Player player;
 	private ArrayList<Bullet> bullets;
@@ -36,7 +44,12 @@ public class PlayState extends GameState{
 	
 	@Override
 	public void init() {
+		sb = new SpriteBatch();
 		sr = new ShapeRenderer();
+		
+		//set font
+		FreeTypeFontGenerator gen = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Hyperspace Bold.ttf"));
+		font = gen.generateFont(20);
 		
 		bullets = new ArrayList<Bullet>();
 		
@@ -116,6 +129,7 @@ public class PlayState extends GameState{
 		
 		if(player.isDead()){
 			player.reset();
+			player.loseLife();
 			return;
 		}
 		
@@ -174,6 +188,7 @@ public class PlayState extends GameState{
 					bullets.remove(i--);
 					asteroids.remove(j--);//TODO: Move into splitAsteroid method
 					splitAsteroid(a);
+					player.incrementScore(a.getScore());
 					break;
 				}
 			}
@@ -195,6 +210,13 @@ public class PlayState extends GameState{
 		for(Particle part : particles){
 			part.draw(sr);
 		}
+		
+		//draw score
+		sb.setColor(Color.WHITE);
+		
+		sb.begin();
+		font.draw(sb, Long.toString(player.getScore()), 40, 390);
+		sb.end();
 	}
 
 	@Override

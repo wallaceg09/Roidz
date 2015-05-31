@@ -9,8 +9,8 @@ target/
 *.class
  
 # Package Files #
-*.jar
-*.war
+#*.jar
+#*.war
 *.ear
 *.db
  
@@ -44,8 +44,8 @@ Desktop.ini
 ######################
  
 *.pydevproject
-.project
-.metadata
+#.project
+#.metadata
 bin/**
 tmp/**
 tmp/**/*
@@ -54,7 +54,7 @@ tmp/**/*
 *.swp
 *~.nib
 local.properties
-.classpath
+#.classpath
 .settings/
 .loadpath
 /src/main/resources/rebel.xml
