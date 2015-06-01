@@ -123,7 +123,10 @@ public class GameOverState extends GameState {
 
 	@Override
 	public void dispose() {
-		
+		sb.dispose();
+		sr.dispose();
+		gameOverFont.dispose();
+		font.dispose();
 	}
 	
 	private void updateNewName(){

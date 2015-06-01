@@ -99,9 +99,9 @@ public class Player extends SpaceObject{
 	public void setRight(boolean b){ right = b; }
 	public void setUp(boolean b)
 	{
-		if(b && !up && !hit && !dead){
+		if(b && !up && !hit){
 			Jukebox.loop("thruster");//FIXME: If a player dies while holding the up button, the thruster noise doesn't play. Might want to move this into update or something...
-		}else if (hit || dead || !b){
+		}else if (!b){
 			Jukebox.stop("thruster");
 		}
 		up = b;
@@ -114,17 +114,18 @@ public class Player extends SpaceObject{
 	}
 	
 	public void shoot(){
-		if(!hit && !dead){
+		//if(!hit && !dead){
 			if(bullets.size() < MAX_BULLETS){
 				bullets.add(new Bullet(x, y, radians));
 			}
 			Jukebox.play("shoot");			
-		}
+		//}
 	}
 	
 	public void hit(){
 		System.out.println("Player has been hit.");
 		if(!hit){
+			Jukebox.stop("thruster");
 			Jukebox.play("explode");
 			hit = true;
 			dx = dy = 0;

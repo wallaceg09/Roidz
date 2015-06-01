@@ -118,7 +118,9 @@ public class MenuState extends GameState{
 
 	@Override
 	public void dispose() {
-		
+		sb.dispose();
+		font.dispose();
+		titleFont.dispose();
 	}
 
 }
