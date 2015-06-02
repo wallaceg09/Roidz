@@ -14,6 +14,8 @@ import com.tutorial.asteroids.entities.Asteroid;
 import com.tutorial.asteroids.entities.Bullet;
 import com.tutorial.asteroids.entities.Particle;
 import com.tutorial.asteroids.entities.Player;
+import com.tutorial.asteroids.entities.controllers.HumanController;
+import com.tutorial.asteroids.entities.controllers.PlayerController;
 import com.tutorial.asteroids.managers.GameKeys;
 import com.tutorial.asteroids.managers.GameStateManager;
 import com.tutorial.asteroids.managers.Jukebox;
@@ -46,10 +48,17 @@ public class PlayState extends GameState{
 	private float currentDelay;
 	private float bgTimer;
 	private boolean playLowPulse;
+	
+	private PlayerController controller;
 
 	public  PlayState(GameStateManager gsm) {
 		super(gsm);
-		
+		this.controller = new HumanController(this.player);
+	}
+	
+	public PlayState(GameStateManager gsm, PlayerController controller){
+		super(gsm);
+		this.controller = controller;
 	}
 	
 	@Override
@@ -272,14 +281,7 @@ public class PlayState extends GameState{
 
 	@Override
 	public void handleInput() {
-		if(!player.isHit()){
-			player.setLeft(GameKeys.isDown(GameKeys.LEFT));
-			player.setRight(GameKeys.isDown(GameKeys.RIGHT));
-			player.setUp(GameKeys.isDown(GameKeys.UP));
-			if(GameKeys.isPressed(GameKeys.SPACE)){
-				player.shoot();
-			}			
-		}
+		this.controller.handleInput();
 	}
 
 	@Override

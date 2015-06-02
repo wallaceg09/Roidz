@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.tutorial.asteroids.managers.GameINputProcessor;
+import com.tutorial.asteroids.managers.GameInputProcessor;
 import com.tutorial.asteroids.managers.GameKeys;
 import com.tutorial.asteroids.managers.GameStateManager;
 import com.tutorial.asteroids.managers.Jukebox;
@@ -34,7 +34,7 @@ public class Asteroids implements ApplicationListener {
 		camera.translate(WIDTH/2, HEIGHT/2);
 		camera.update();
 				
-		Gdx.input.setInputProcessor(new GameINputProcessor());
+		Gdx.input.setInputProcessor(new GameInputProcessor());
 		
 		Jukebox.load("sounds/explode.ogg", "explode");
 		Jukebox.load("sounds/extralife.ogg", "extralife");

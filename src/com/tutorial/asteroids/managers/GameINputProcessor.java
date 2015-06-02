@@ -3,7 +3,7 @@ package com.tutorial.asteroids.managers;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Input.Keys;
 
-public class GameINputProcessor extends InputAdapter{
+public class GameInputProcessor extends InputAdapter{
 	
 	public boolean keyDown(int k){
 		if(k==Keys.UP){
