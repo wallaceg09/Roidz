@@ -13,14 +13,13 @@ public class HumanController extends PlayerController {
 
 	@Override
 	public void handleInput() {
-		if(!player.isHit()){
-			player.setLeft(GameKeys.isDown(GameKeys.LEFT));
-			player.setRight(GameKeys.isDown(GameKeys.RIGHT));
-			player.setUp(GameKeys.isDown(GameKeys.UP));
-			if(GameKeys.isPressed(GameKeys.SPACE)){
-				player.shoot();
-			}			
-		}
+	
+		player.setLeft(GameKeys.isDown(GameKeys.LEFT));
+		player.setRight(GameKeys.isDown(GameKeys.RIGHT));
+		player.setUp(GameKeys.isDown(GameKeys.UP));
+		if(GameKeys.isPressed(GameKeys.SPACE)){
+			player.shoot();
+		}			
 	}
 
 }

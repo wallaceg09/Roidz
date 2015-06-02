@@ -281,7 +281,9 @@ public class PlayState extends GameState{
 
 	@Override
 	public void handleInput() {
-		this.controller.handleInput();
+		if(!player.isHit()){
+			this.controller.handleInput();
+		}
 	}
 
 	@Override

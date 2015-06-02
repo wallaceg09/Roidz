@@ -12,7 +12,7 @@ import com.tutorial.asteroids.managers.Jukebox;
 
 public class Player extends SpaceObject{
 	
-	private final int MAX_BULLETS = 100;
+	private final int MAX_BULLETS = 4;
 	private ArrayList<Bullet> bullets;
 	
 	private float[] flamex;

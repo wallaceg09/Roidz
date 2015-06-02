@@ -1,6 +1,8 @@
 package com.tutorial.asteroids.managers;
 
 import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
+import com.tutorial.asteroids.Asteroids;
+import com.tutorial.asteroids.entities.controllers.RandomController;
 
 import gamestates.GameOverState;
 import gamestates.GameState;
@@ -16,10 +18,14 @@ public class GameStateManager {
 	public static final int PLAY = 1;
 	public static final int HIGHSCORES = 2;
 	public static final int GAMEOVER = 3;
+	public static final int RANDOM_AI = 4;
 
 	public static final int INITIAL_STATE = PLAY;
 	
 	public GameStateManager(){
+		if(Asteroids.USE_AI){
+			
+		}
 		setState(MENU);
 	}
 	
@@ -36,6 +42,8 @@ public class GameStateManager {
 		}
 		else if(state == GAMEOVER){
 			gameState = new GameOverState(this);
+		}else if(state == RANDOM_AI){
+			gameState = new PlayState(this, new RandomController(player))
 		}
 	}
 	
