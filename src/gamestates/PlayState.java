@@ -59,6 +59,15 @@ public class PlayState extends GameState{
 	public PlayState(GameStateManager gsm, PlayerController controller){
 		super(gsm);
 		this.controller = controller;
+		this.controller.addPlayState(this);
+	}
+	
+	public Player getPlayer(){
+		return this.player;
+	}
+	
+	public Asteroid[] getAsteroids(){
+		return asteroids.toArray(new Asteroid[0]);
 	}
 	
 	@Override

@@ -20,13 +20,13 @@ public class GameStateManager {
 	public static final int GAMEOVER = 3;
 	public static final int RANDOM_AI = 4;
 
-	public static final int INITIAL_STATE = PLAY;
+	public static final int INITIAL_STATE = RANDOM_AI;
 	
 	public GameStateManager(){
 		if(Asteroids.USE_AI){
 			
 		}
-		setState(MENU);
+		setState(INITIAL_STATE);
 	}
 	
 	public void setState(int state){
@@ -42,8 +42,9 @@ public class GameStateManager {
 		}
 		else if(state == GAMEOVER){
 			gameState = new GameOverState(this);
-		}else if(state == RANDOM_AI){
-			gameState = new PlayState(this, new RandomController(player))
+		}
+		else if(state == RANDOM_AI){
+			gameState = new PlayState(this, new RandomController());
 		}
 	}
 	

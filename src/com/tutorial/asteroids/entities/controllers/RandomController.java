@@ -6,11 +6,9 @@ import com.tutorial.asteroids.entities.Player;
 
 public class RandomController extends PlayerController{
 	
-	private Player player;
 	private Random rand;
 	
-	public RandomController(Player player) {
-		this.player = player;
+	public RandomController() {
 		this.rand = new Random();
 	}
 	
